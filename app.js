@@ -1,7 +1,7 @@
 const express = require("express");
 const app = new express();
 const path = require("path");
-
+const mongoose = require("mongoose");
 const cors = require("cors");
 app.use(cors());
 const morgan = require("morgan");
@@ -24,6 +24,15 @@ app.use("/api", userRouter);
 app.get("*", function (req, res) {
   res.sendFile(path.join(__dirname, "/build/index.html"));
 });
-app.listen(PORT, () => {
-  console.log(`The server is running on port ${PORT}`);
-});
+
+mongoose
+  .connect(process.env.mongodb_url)
+  .then(() => {
+    console.log("Connected to atlas");
+    app.listen(PORT, () => {
+      console.log(`The server is running on port ${PORT}`);
+    });
+  })
+  .catch(() => {
+    console.log("Error!! DB Connection lost");
+  });
