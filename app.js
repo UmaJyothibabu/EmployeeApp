@@ -11,7 +11,7 @@ app.use(express.static(path.join(__dirname, "/build")));
 require("dotenv").config();
 require("./Db/connect");
 
-PORT = process.env.PORT;
+PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -21,7 +21,7 @@ app.use("/api", employeeRouter);
 const userRouter = require("./Routes/userRoute");
 app.use("/api", userRouter);
 
-app.get("/*", function (req, res) {
+app.get("*", function (req, res) {
   res.sendFile(path.join(__dirname, "/build/index.html"));
 });
 app.listen(PORT, () => {
